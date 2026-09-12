@@ -1,5 +1,3 @@
-def gv
-
 pipeline {   
     agent any
     tools {
@@ -11,41 +9,38 @@ pipeline {
     }
 
   stages {
-        stage("init") {
-            steps {
-               script {
-                    gv = load "script.groovy"
-                } 
-            }
-        }
-        stage("build") {
+
+        stage("test") {
             steps {
                 script {
-                    gv.buildApp()
+                    echo "Testing the application..."
+                    echo "Executing pipeline on branch: ${BRANCH_NAME}"
                 }
             }
         }
 
-        stage("test") {
+        stage("build") {
             when {
                 expression { 
-                    params.executeTests 
-                    }
+                    BRANCH_NAME == 'main'
+                 }
             }
             steps {
                 script {
-                    gv.testApp()
+                    echo "Building the application..."
                 }
             }
         }
 
         stage("deploy") {
+            when {
+                expression { 
+                    BRANCH_NAME == 'main'
+                 }
+            }
             steps {
                 script {
-                    env.ENV = input message: "Select the environment to deploy to", ok: "Yes, deploy", parameters: [choice(name: 'APP_ENV', choices: ['dev', 'staging', 'production'], description: 'Select the environment to deploy to')]
-
-                    gv.deployApp()
-                    echo "Deploying to environment: ${ENV}"
+                    echo "Deploying the application..."
                 }
             }
         }               
