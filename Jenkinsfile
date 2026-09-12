@@ -9,12 +9,6 @@ pipeline {
         choice(name: 'VERSION', choices: ['1.1.0', '1.2.0', '1.3.0'], description: '')
         booleanParam(name: 'executeTests', defaultValue: true, description: 'Run tests after build')
     }
-    environment {
-        // Define environment variables here
-        APP_ENV = 'production'
-        NEW_VERSION = '1.3.0'
-        SERVER_CREDENTIALS = credentials('server-credentials')
-    }
 
   stages {
         stage("init") {
@@ -46,9 +40,17 @@ pipeline {
         }
 
         stage("deploy") {
+            input {
+                message "Select the environment to deploy to"
+                ok "Env selected"
+                parameters {
+                    choice(name: 'APP_ENV', choices: ['dev', 'staging', 'production'], description: 'Select the environment to deploy to')
+                }
+            }
             steps {
                 script {
                     gv.deployApp()
+                    echo "Deploying version: ${params.VERSION} to environment: ${APP_ENV}"
                 }
             }
         }               
