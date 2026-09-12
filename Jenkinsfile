@@ -4,7 +4,7 @@ pipeline {
         maven 'maven-3.9.16' // Specify the Maven version to use
     }
     parameters {
-        choice(name: 'VERSION', choices: ['1.1.0', '1.2.0', '1.3.0'], description: '')
+        choice(name: 'VERSION', choices: ['1.1.0', '1.2.0', '1.3.0', '1.4.9'], description: '')
         booleanParam(name: 'executeTests', defaultValue: true, description: 'Run tests after build')
     }
 
