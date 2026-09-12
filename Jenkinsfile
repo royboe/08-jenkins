@@ -39,10 +39,10 @@ pipeline {
                 echo "Deploying version: ${VERSION} in environment: ${APP_ENV}"
                 withCredentials([usernamePassword(credentialsId: 'server-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) 
                 {
-                    sh "
+                    sh '
                         echo "Deploying to server with username: ${USERNAME}"
                         # Add deployment commands here
-                    "
+                    '
                 }
             }
         }               
