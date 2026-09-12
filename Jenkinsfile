@@ -18,7 +18,7 @@ pipeline {
         stage("build") {
             steps {
                 echo 'building the application...'
-                echo "Building version: ${NEW_VERSION} in environment: ${APP_ENV}"
+                echo "Building version: ${VERSION} in environment: ${APP_ENV}"
             }
         }
 
@@ -37,7 +37,6 @@ pipeline {
             steps {
                 echo 'deploying the application...'
                 echo "Deploying version: ${VERSION} in environment: ${APP_ENV}"
-                withCredentials([usernamePassword(credentialsId: 'server-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) 
             }
         }               
     }
