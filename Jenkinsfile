@@ -1,46 +1,39 @@
+def gv
+
 pipeline {   
     agent any
     tools {
-        maven 'maven-3.9.16' // Specify the Maven version to use
+        maven 'Maven'
     }
-    parameters {
-        choice(name: 'VERSION', choices: ['1.1.0', '1.2.0', '1.3.0', '1.4.9'], description: '')
-        booleanParam(name: 'executeTests', defaultValue: true, description: 'Run tests after build')
-    }
-
-  stages {
-
-        stage("test") {
+    stages {
+        stage("init") {
             steps {
                 script {
-                    echo "Testing the application..."
-                    echo "Executing pipeline on branch: ${BRANCH_NAME}"
+                    gv = load "script.groovy"
+                }
+            }
+        }
+        stage("build jar") {
+            steps {
+                script {
+                    gv.buildJar()
+
                 }
             }
         }
 
-        stage("build") {
-            when {
-                expression { 
-                    BRANCH_NAME == 'main'
-                 }
-            }
+        stage("build image") {
             steps {
                 script {
-                    echo "Building the application..."
+                    gv.buildImage()
                 }
             }
         }
 
         stage("deploy") {
-            when {
-                expression { 
-                    BRANCH_NAME == 'main'
-                 }
-            }
             steps {
                 script {
-                    echo "Deploying the application..."
+                    gv.deployApp()
                 }
             }
         }               
